@@ -1,3 +1,122 @@
+
+// Fetch events from the backend API
+export async function fetchEventsFromAPI() {
+  try {
+    const response = await fetch('http://localhost:3000/api/events'); // Adjust endpoint as needed
+    if (!response.ok) {
+      throw new Error('Failed to fetch events');
+    }
+    const events = await response.json();
+    return events;
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    return []; // Return an empty array in case of error
+  }
+}
+
+// Fetch employees from the backend API
+export async function fetchEmployeesFromAPI() {
+  try {
+    const response = await fetch('http://localhost:3000/api/employees'); // Adjust endpoint as needed
+    if (!response.ok) {
+      throw new Error('Failed to fetch employees');
+    }
+    const employees = await response.json();
+    // console.log(employees);
+    
+    return employees;
+  } catch (error) {
+    console.error('Error fetching employees:', error);
+    return []; // Return an empty array in case of error
+  }
+}
+
+// Fetch holidays from the backend API
+export async function fetchHolidaysFromAPI() {
+  try {
+    const response = await fetch('http://localhost:3000/api/holidays'); // Adjust endpoint as needed
+    if (!response.ok) {
+      throw new Error('Failed to fetch holidays');
+    }
+    const holidays = await response.json();
+    return holidays;
+  } catch (error) {
+    console.error('Error fetching holidays:', error);
+    return []; // Return an empty array in case of error
+  }
+}
+
+// Fetch resources from the backend API
+export async function fetchResourcesFromAPI() {
+  try {
+    const response = await fetch('http://localhost:3000/api/resources'); // Adjust endpoint as needed
+    if (!response.ok) {
+      throw new Error('Failed to fetch resources');
+    }
+    const resources = await response.json();
+    return resources;
+  } catch (error) {
+    console.error('Error fetching resources:', error);
+    return []; // Return an empty array in case of error
+  }
+}
+
+// Fetch plannings from the backend API
+export async function fetchPlanningsFromAPI() {
+  try {
+    const response = await fetch('http://localhost:3000/api/plannings'); // Adjust endpoint as needed
+    if (!response.ok) {
+      throw new Error('Failed to fetch plannings');
+    }
+    const plannings = await response.json();
+    return plannings;
+  } catch (error) {
+    console.error('Error fetching plannings:', error);
+    return []; // Return an empty array in case of error
+  }
+}
+// Fetch recurrences from the backend API
+export async function fetchRecurrencesFromAPI() {
+  try {
+    const response = await fetch('http://localhost:3000/api/recurrences'); // Adjust endpoint as needed
+    if (!response.ok) {
+      throw new Error('Failed to fetch recurrences');
+    }
+    const recurrences = await response.json();
+    return recurrences;
+  } catch (error) {
+    console.error('Error fetching recurrences:', error);
+    return []; // Return an empty array in case of error
+  }
+}
+// Fetch exceptions from the backend API
+export async function fetchExceptionsFromAPI() {
+  try {
+    const response = await fetch('http://localhost:3000/api/exceptions'); // Adjust endpoint as needed
+    if (!response.ok) {
+      throw new Error('Failed to fetch exceptions');
+    }
+    const exceptions = await response.json();
+    return exceptions;
+  } catch (error) {
+    console.error('Error fetching exceptions:', error);
+    return []; // Return an empty array in case of error
+  }
+}
+
+
+const plannings = await fetchPlanningsFromAPI()
+const employees = await fetchEmployeesFromAPI()
+const recurrences = await fetchRecurrencesFromAPI()
+const holidays = await fetchHolidaysFromAPI()
+const exceptions = await fetchExceptionsFromAPI()
+console.log(recurrences);
+
+
+
+
+
+
 let eventGuid = 0
 let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
 
@@ -79,83 +198,121 @@ const events =
     },
   ]
 
-const holidays = [
-  {
-    id: 'h1',
-    name: 'Thanksgiving',
-    date: '2024-11-23',
-  },
-  {
-    id: 'h2',
-    name: 'Christmas Day',
-    date: '2024-12-25',
-  },
-  {
-    id: 'h3',
-    name: 'New Year’s Day',
-    date: '2025-01-01',
-  },
-]
+// const holidays = [
+//   {
+//     id: 'h1',
+//     name: 'Thanksgiving',
+//     date: '2024-11-23',
+//   },
+//   {
+//     id: 'h2',
+//     name: 'Christmas Day',
+//     date: '2024-12-25',
+//   },
+//   {
+//     id: 'h3',
+//     name: 'New Year’s Day',
+//     date: '2025-01-01',
+//   },
+// ]
 
-function generateEmployeeSchedules(employees, startDate, endDate) {
-  const events = []
-  const start = new Date(startDate)
-  const end = new Date(endDate)
+async function generateEmployeeSchedules(employees, plannings, holidays, recurrences, startDate, endDate) {
+  const events = [];
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+console.log(recurrences);
+console.log(plannings);
 
   employees.forEach((employee) => {
-    const { schedule, name } = employee
-    const { defaultShift, exceptions } = schedule
+    // Find the planning for this employee
+    const employeePlanning = plannings.find(planning => planning.employee_id === employee.employee_id);
+    console.log(employeePlanning);
+    
+    if (!employeePlanning) return; // Skip if no planning found for this employee
+    
+    const { start_time, end_time, status, days_of_the_week } = employeePlanning; // Use the planning times and status
+    // const { start_time, end_time, status } = employeePlanning; // Use the planning times and status
+    // const { default_shift, exceptions, days_of_week } = employeePlanning;
 
+    console.log(days_of_the_week);
     // Iterate through the date range
-    let currentDate = new Date(start)
+    let currentDate = new Date(start);
     while (currentDate <= end) {
-      const dayOfWeek = currentDate.getDay()
+      const dayOfWeek = currentDate.getDay();
 
       // Check if the current date is a holiday
-      const currentDateStr = currentDate.toISOString().split('T')[0] // Extract YYYY-MM-DD
-      const isHoliday = holidays.some((holiday) => holiday.date === currentDateStr)
+      const currentDateStr = currentDate.toISOString().split('T')[0]; // Extract YYYY-MM-DD
+      const isHoliday = holidays.some((holiday) => holiday.date === currentDateStr);
 
       // Skip the day if it's a holiday
       if (isHoliday) {
-        currentDate.setDate(currentDate.getDate() + 1)
-        continue
+        currentDate.setDate(currentDate.getDate() + 1);
+        continue;
       }
-      // Check if the current day is a workday
-      if (defaultShift.daysOfWeek.includes(dayOfWeek)) {
-        const shiftStart = new Date(currentDate)
-        const shiftEnd = new Date(currentDate)
 
-        // Set the start and end times for the shift
-        const [startHour, startMinute] = defaultShift.start.split(':').map(Number)
-        const [endHour, endMinute] = defaultShift.end.split(':').map(Number)
+      // Check if the current day is a workday based on the planning
+      if (days_of_the_week && days_of_the_week.includes(dayOfWeek)) {
+        const shiftStart = new Date(currentDate);
+        const shiftEnd = new Date(currentDate);
 
-        shiftStart.setHours(startHour, startMinute, 0)
-        shiftEnd.setHours(endHour, endMinute, 0)
+        // Set the start and end times for the shift from the planning
+        const [startHour, startMinute] = start_time.split(':').map(Number);
+        const [endHour, endMinute] = end_time.split(':').map(Number);
+
+        shiftStart.setHours(startHour, startMinute, 0);
+        shiftEnd.setHours(endHour, endMinute, 0);
 
         // Check for exceptions (e.g., WorkFromHome)
-        const exception = exceptions.find((exc) => exc.daysOfWeek.includes(dayOfWeek))
-        const isWorkFromHome = exception && exception.type === 'WorkFromHome'
+        // const exception = exceptions.find((exc) => exc.days_of_week && exc.days_of_the_week.includes(dayOfWeek));
+        // const isWorkFromHome = exception && exception.type === 'WorkFromHome';
 
         // Add the shift event
         events.push({
-          id: `${employee.id}-${currentDate.toISOString()}`,
-          resourceId: `${employee.id}`,
-          title: `${name} - ${isWorkFromHome ? 'Work from Home' : 'Onsite Work'}`,
+          id: `${employee.employee_id}-${currentDate.toISOString()}`,
+          resource_id: `${employee.employee_id}`,
+          title: `${employee.first_name} ${employee.last_name}`,
+          // - ${isWorkFromHome ? 'Work from Home' : 'Onsite Work'}
           start: shiftStart.toISOString(),
           end: shiftEnd.toISOString(),
-          description: isWorkFromHome ? 'Works from home on this day.' : 'Regular shift.',
-          breaks: defaultShift.breaks,
-          color: isWorkFromHome ? '#007bff' : '#28a745',
-        })
+          description: "test",
+          // isWorkFromHome ? 'Works from home on this day.' : 'Regular shift.',
+          status: status, // Use the status from the planning
+          backgroundColor: '#007bff'
+          // isWorkFromHome ? '#007bff' : '#28a745',
+        });
       }
 
       // Move to the next day
-      currentDate.setDate(currentDate.getDate() + 1)
+      currentDate.setDate(currentDate.getDate() + 1);
     }
-  })
 
-  return events
+    // Handle recurrences (if applicable)
+    recurrences.forEach((recurrence) => {
+      if (recurrence.event_id) {
+        let recurrenceDate = new Date(start);
+        while (recurrenceDate <= new Date(recurrence.end_date)) {
+          // Adjust event generation logic based on recurrence frequency and interval
+          if (recurrence.frequency === 'weekly') {
+            // Weekly recurrence logic
+          } else if (recurrence.frequency === 'monthly') {
+            // Monthly recurrence logic
+          }
+
+          // Move to next recurrence date based on interval
+          recurrenceDate.setDate(recurrenceDate.getDate() + recurrence.interval);
+        }
+      }
+    });
+  });
+
+  console.log(events);
+  return events;
 }
+
+
+
+
+
 
 function generateRecurringEvents(events) {
   const recurringEvents = []
@@ -200,48 +357,50 @@ function generateRecurringEvents(events) {
   return recurringEvents
 }
 
-const employees = [
-  {
-    id: '1',
-    name: 'John Smith',
-    role: 'Developer',
-    schedule: {
-      defaultShift: {
-        start: '09:00',
-        end: '17:00',
-        breaks: [{ start: '12:30', end: '13:00' }],
-        daysOfWeek: [1, 2, 3, 4, 5, 6], // Monday to Friday
-      },
-      exceptions: [
-        {
-          type: 'WorkFromHome',
-          daysOfWeek: [2, 4], // Tuesday, Thursday
-        },
-      ],
-    },
-  },
-  {
-    id: '2',
-    name: 'Bob Wesson',
-    role: 'Factory Worker',
-    schedule: {
-      defaultShift: {
-        start: '05:00',
-        end: '13:00',
-        breaks: [{ start: '09:00', end: '09:20' }],
-        daysOfWeek: [1, 2, 3, 4, 5], // Monday to Friday
-      },
-      exceptions: [], // No exceptions
-    },
-  },
-]
+
+
+// const employees = [
+//   {
+//     id: '1',
+//     name: 'John Smith',
+//     role: 'Developer',
+//     schedule: {
+//       defaultShift: {
+//         start: '09:00',
+//         end: '17:00',
+//         breaks: [{ start: '12:30', end: '13:00' }],
+//         daysOfWeek: [1, 2, 3, 4, 5, 6], // Monday to Friday
+//       },
+//       exceptions: [
+//         {
+//           type: 'WorkFromHome',
+//           daysOfWeek: [2, 4], // Tuesday, Thursday
+//         },
+//       ],
+//     },
+//   },
+//   {
+//     id: '2',
+//     name: 'Bob Wesson',
+//     role: 'Factory Worker',
+//     schedule: {
+//       defaultShift: {
+//         start: '05:00',
+//         end: '13:00',
+//         breaks: [{ start: '09:00', end: '09:20' }],
+//         daysOfWeek: [1, 2, 3, 4, 5], // Monday to Friday
+//       },
+//       exceptions: [], // No exceptions
+//     },
+//   },
+// ]
 
 export const INITIAL_EVENTS = [
-  ...generateEmployeeSchedules(employees, '2024-11-01', '2024-11-31'),
-   ...generateRecurringEvents(events),
+  ...await generateEmployeeSchedules(employees, plannings,recurrences,  holidays, '2024-11-01', '2024-11-31'),
+  //  ...generateRecurringEvents(events),
   ...events,
   {
-    // id: createEventId(),
+    id: createEventId(),
     title: 'All-day event',
     start: todayStr,
   },

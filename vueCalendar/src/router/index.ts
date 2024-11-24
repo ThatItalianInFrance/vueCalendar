@@ -18,6 +18,14 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
     {
+      path: '/scheduler',
+      name: 'scheduler',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/SchedulerView.vue'),
+    },
+    {
       path: '/calendargrid',
       name: 'calendargrid',
       // route level code-splitting
