@@ -1,202 +1,195 @@
-
 // Fetch events from the backend API
 export async function fetchEventsFromAPI() {
   try {
-    const response = await fetch('http://localhost:3000/api/events'); // Adjust endpoint as needed
+    const response = await fetch('http://localhost:3000/api/events') // Adjust endpoint as needed
     if (!response.ok) {
-      throw new Error('Failed to fetch events');
+      throw new Error('Failed to fetch events')
     }
-    const events = await response.json();
-    return events;
+    const events = await response.json()
+    return events
   } catch (error) {
-    console.error('Error fetching events:', error);
-    return []; // Return an empty array in case of error
+    console.error('Error fetching events:', error)
+    return [] // Return an empty array in case of error
   }
 }
 
 // Fetch employees from the backend API
 export async function fetchEmployeesFromAPI() {
   try {
-    const response = await fetch('http://localhost:3000/api/employees'); // Adjust endpoint as needed
+    const response = await fetch('http://localhost:3000/api/employees') // Adjust endpoint as needed
     if (!response.ok) {
-      throw new Error('Failed to fetch employees');
+      throw new Error('Failed to fetch employees')
     }
-    const employees = await response.json();
+    const employees = await response.json()
     // console.log(employees);
-    
-    return employees;
+
+    return employees
   } catch (error) {
-    console.error('Error fetching employees:', error);
-    return []; // Return an empty array in case of error
+    console.error('Error fetching employees:', error)
+    return [] // Return an empty array in case of error
   }
 }
 
 // Fetch holidays from the backend API
 export async function fetchHolidaysFromAPI() {
   try {
-    const response = await fetch('http://localhost:3000/api/holidays'); // Adjust endpoint as needed
+    const response = await fetch('http://localhost:3000/api/holidays') // Adjust endpoint as needed
     if (!response.ok) {
-      throw new Error('Failed to fetch holidays');
+      throw new Error('Failed to fetch holidays')
     }
-    const holidays = await response.json();
-    return holidays;
+    const holidays = await response.json()
+    return holidays
   } catch (error) {
-    console.error('Error fetching holidays:', error);
-    return []; // Return an empty array in case of error
+    console.error('Error fetching holidays:', error)
+    return [] // Return an empty array in case of error
   }
 }
 
 // Fetch resources from the backend API
 export async function fetchResourcesFromAPI() {
   try {
-    const response = await fetch('http://localhost:3000/api/resources'); // Adjust endpoint as needed
+    const response = await fetch('http://localhost:3000/api/resources') // Adjust endpoint as needed
     if (!response.ok) {
-      throw new Error('Failed to fetch resources');
+      throw new Error('Failed to fetch resources')
     }
-    const resources = await response.json();
-    return resources;
+    const resources = await response.json()
+    return resources
   } catch (error) {
-    console.error('Error fetching resources:', error);
-    return []; // Return an empty array in case of error
+    console.error('Error fetching resources:', error)
+    return [] // Return an empty array in case of error
   }
 }
 
 // Fetch plannings from the backend API
 export async function fetchPlanningsFromAPI() {
   try {
-    const response = await fetch('http://localhost:3000/api/plannings'); // Adjust endpoint as needed
+    const response = await fetch('http://localhost:3000/api/plannings') // Adjust endpoint as needed
     if (!response.ok) {
-      throw new Error('Failed to fetch plannings');
+      throw new Error('Failed to fetch plannings')
     }
-    const plannings = await response.json();
-    return plannings;
+    const plannings = await response.json()
+    return plannings
   } catch (error) {
-    console.error('Error fetching plannings:', error);
-    return []; // Return an empty array in case of error
+    console.error('Error fetching plannings:', error)
+    return [] // Return an empty array in case of error
   }
 }
 // Fetch recurrences from the backend API
 export async function fetchRecurrencesFromAPI() {
   try {
-    const response = await fetch('http://localhost:3000/api/recurrences'); // Adjust endpoint as needed
+    const response = await fetch('http://localhost:3000/api/recurrences') // Adjust endpoint as needed
     if (!response.ok) {
-      throw new Error('Failed to fetch recurrences');
+      throw new Error('Failed to fetch recurrences')
     }
-    const recurrences = await response.json();
-    return recurrences;
+    const recurrences = await response.json()
+    return recurrences
   } catch (error) {
-    console.error('Error fetching recurrences:', error);
-    return []; // Return an empty array in case of error
+    console.error('Error fetching recurrences:', error)
+    return [] // Return an empty array in case of error
   }
 }
 // Fetch exceptions from the backend API
 export async function fetchExceptionsFromAPI() {
   try {
-    const response = await fetch('http://localhost:3000/api/exceptions'); // Adjust endpoint as needed
+    const response = await fetch('http://localhost:3000/api/exceptions') // Adjust endpoint as needed
     if (!response.ok) {
-      throw new Error('Failed to fetch exceptions');
+      throw new Error('Failed to fetch exceptions')
     }
-    const exceptions = await response.json();
-    return exceptions;
+    const exceptions = await response.json()
+    return exceptions
   } catch (error) {
-    console.error('Error fetching exceptions:', error);
-    return []; // Return an empty array in case of error
+    console.error('Error fetching exceptions:', error)
+    return [] // Return an empty array in case of error
   }
 }
-
 
 const plannings = await fetchPlanningsFromAPI()
 const employees = await fetchEmployeesFromAPI()
 const recurrences = await fetchRecurrencesFromAPI()
 const holidays = await fetchHolidaysFromAPI()
 const exceptions = await fetchExceptionsFromAPI()
-console.log(recurrences);
-
-
-
-
-
+// console.log(recurrences)
+console.log(holidays);
 
 let eventGuid = 0
 let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
 
-const events = 
-  [
-    {
-      id: '1',
-      resourceId: '1', // Jean Dupont
-      title: 'Réunion Mensuelle',
-      start: '2024-11-20T10:00:00',
-      end: '2024-11-20T12:00:00',
-      recurrence: {
-        frequency: 'monthly',
-        interval: 1, // Once per month
-        daysOfMonth: [20], // 20th of each month
-        endDate: '2025-01-01',
-      },
-      backgroundColor: '#2196F3',
+const events = [
+  {
+    id: '1',
+    resourceId: '1', // Jean Dupont
+    title: 'Réunion Mensuelle',
+    start: '2024-11-20T10:00:00',
+    end: '2024-11-20T12:00:00',
+    recurrence: {
+      frequency: 'monthly',
+      interval: 1, // Once per month
+      daysOfMonth: [20], // 20th of each month
+      endDate: '2025-01-01',
     },
-    {
-      id: '2',
-      resourceId: '2', // Marie Curie
-      title: 'Travail du Matin',
-      start: '2024-11-21T08:30:00',
-      end: '2024-11-21T12:00:00',
-      recurrence: {
-        frequency: 'monthly',
-        interval: 1, // Once per month
-        daysOfMonth: [21], // 21st of each month
-        endDate: '2025-01-01',
-      },
-      backgroundColor: '#FFC107',
+    backgroundColor: '#2196F3',
+  },
+  {
+    id: '2',
+    resourceId: '2', // Marie Curie
+    title: 'Travail du Matin',
+    start: '2024-11-21T08:30:00',
+    end: '2024-11-21T12:00:00',
+    recurrence: {
+      frequency: 'monthly',
+      interval: 1, // Once per month
+      daysOfMonth: [21], // 21st of each month
+      endDate: '2025-01-01',
     },
-    {
-      id: '3',
-      resourceId: '3', // Émile Zola
-      title: 'Travail d’Après-midi',
-      start: '2024-11-22T13:00:00',
-      end: '2024-11-22T17:00:00',
-      recurrence: {
-        frequency: 'monthly',
-        interval: 1, // Once per month
-        daysOfMonth: [22], // 22nd of each month
-        endDate: '2025-01-01',
-      },
-      backgroundColor: '#FF5733',
+    backgroundColor: '#FFC107',
+  },
+  {
+    id: '3',
+    resourceId: '3', // Émile Zola
+    title: 'Travail d’Après-midi',
+    start: '2024-11-22T13:00:00',
+    end: '2024-11-22T17:00:00',
+    recurrence: {
+      frequency: 'monthly',
+      interval: 1, // Once per month
+      daysOfMonth: [22], // 22nd of each month
+      endDate: '2025-01-01',
     },
-    {
-      id: '4',
-      resourceId: '4', // Claire Fontaine
-      title: 'Planification Mensuelle',
-      start: '2024-11-23T14:00:00',
-      end: '2024-11-23T16:00:00',
-      recurrence: {
-        frequency: 'monthly',
-        interval: 1, // Once per month
-        daysOfMonth: [23], // 23rd of each month
-        endDate: '2025-01-01',
-      },
-      backgroundColor: '#4CAF50',
+    backgroundColor: '#FF5733',
+  },
+  {
+    id: '4',
+    resourceId: '4', // Claire Fontaine
+    title: 'Planification Mensuelle',
+    start: '2024-11-23T14:00:00',
+    end: '2024-11-23T16:00:00',
+    recurrence: {
+      frequency: 'monthly',
+      interval: 1, // Once per month
+      daysOfMonth: [23], // 23rd of each month
+      endDate: '2025-01-01',
     },
-  ];
-  const swipeEvents = [
-    {
-      id: '3',
-      resourceId: '1',
-      title: 'Swipe In',
-      start: '2024-11-20T08:05:00',
-      end: '2024-11-20T08:10:00',
-      backgroundColor: '#007bff',
-    },
-    {
-      id: '4',
-      resourceId: '2',
-      title: 'Swipe Out',
-      start: '2024-11-20T17:00:00',
-      end: '2024-11-20T17:05:00',
-      backgroundColor: '#dc3545',
-    },
-  ]
+    backgroundColor: '#4CAF50',
+  },
+]
+const swipeEvents = [
+  {
+    id: '3',
+    resourceId: '1',
+    title: 'Swipe In',
+    start: '2024-11-20T08:05:00',
+    end: '2024-11-20T08:10:00',
+    backgroundColor: '#007bff',
+  },
+  {
+    id: '4',
+    resourceId: '2',
+    title: 'Swipe Out',
+    start: '2024-11-20T17:00:00',
+    end: '2024-11-20T17:05:00',
+    backgroundColor: '#dc3545',
+  },
+]
 
 // const holidays = [
 //   {
@@ -215,104 +208,104 @@ const events =
 //     date: '2025-01-01',
 //   },
 // ]
-
-async function generateEmployeeSchedules(employees, plannings, holidays, recurrences, startDate, endDate) {
-  const events = [];
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-console.log(recurrences);
-console.log(plannings);
+async function generateEmployeeSchedules(
+  employees,
+  plannings,
+  holidays,
+  recurrences,
+  startDate,
+  endDate,
+) {
+  // let events = []
+  const start = new Date(startDate).toISOString().split('T')[0]
+  console.log(start);
+  
+  const end = new Date(endDate)
+  // console.log(recurrences)
+  // console.log(holidays)
 
   employees.forEach((employee) => {
-    // Find the planning for this employee
-    const employeePlanning = plannings.find(planning => planning.employee_id === employee.employee_id);
-    console.log(employeePlanning);
-    
-    if (!employeePlanning) return; // Skip if no planning found for this employee
-    
-    const { start_time, end_time, status, days_of_the_week } = employeePlanning; // Use the planning times and status
-    // const { start_time, end_time, status } = employeePlanning; // Use the planning times and status
-    // const { default_shift, exceptions, days_of_week } = employeePlanning;
+    // Filter all plannings for this employee
+    const employeePlannings = plannings.filter(
+      (planning) => planning.employee_id === employee.employee_id,
+    )
+// console.log(employeePlannings);
 
-    console.log(days_of_the_week);
-    // Iterate through the date range
-    let currentDate = new Date(start);
-    while (currentDate <= end) {
-      const dayOfWeek = currentDate.getDay();
+    if (employeePlannings.length === 0) return // Skip if no planning found
 
-      // Check if the current date is a holiday
-      const currentDateStr = currentDate.toISOString().split('T')[0]; // Extract YYYY-MM-DD
-      const isHoliday = holidays.some((holiday) => holiday.date === currentDateStr);
+    employeePlannings.forEach((planning) => {
+      const { start_time, end_time, status, days_of_the_week } = planning
+// console.log(days_of_the_week);
 
-      // Skip the day if it's a holiday
-      if (isHoliday) {
-        currentDate.setDate(currentDate.getDate() + 1);
-        continue;
-      }
+      let currentDate = new Date(start)
+      while (currentDate <= end) {
+        const dayOfWeek = currentDate.getDay()
+        const currentDateStr = currentDate.toISOString().split('T')[0]
+//         console.log(currentDate);
+        
+// // console.log(currentDateStr);
+// // console.log(holidays[0].holiday_date);
 
-      // Check if the current day is a workday based on the planning
-      if (days_of_the_week && days_of_the_week.includes(dayOfWeek)) {
-        const shiftStart = new Date(currentDate);
-        const shiftEnd = new Date(currentDate);
+// console.log(holidays.some((holiday) => holiday.holiday_date.split('T')[0] === currentDateStr));
 
-        // Set the start and end times for the shift from the planning
-        const [startHour, startMinute] = start_time.split(':').map(Number);
-        const [endHour, endMinute] = end_time.split(':').map(Number);
+        // Skip if holiday
+        if (holidays.some((holiday) => holiday.holiday_date.split('T')[0] === currentDateStr)) {
+          currentDate.setDate(currentDate.getDate() + 1)
 
-        shiftStart.setHours(startHour, startMinute, 0);
-        shiftEnd.setHours(endHour, endMinute, 0);
 
-        // Check for exceptions (e.g., WorkFromHome)
-        // const exception = exceptions.find((exc) => exc.days_of_week && exc.days_of_the_week.includes(dayOfWeek));
-        // const isWorkFromHome = exception && exception.type === 'WorkFromHome';
 
-        // Add the shift event
-        events.push({
-          id: `${employee.employee_id}-${currentDate.toISOString()}`,
-          resource_id: `${employee.employee_id}`,
-          title: `${employee.first_name} ${employee.last_name}`,
-          // - ${isWorkFromHome ? 'Work from Home' : 'Onsite Work'}
-          start: shiftStart.toISOString(),
-          end: shiftEnd.toISOString(),
-          description: "test",
-          // isWorkFromHome ? 'Works from home on this day.' : 'Regular shift.',
-          status: status, // Use the status from the planning
-          backgroundColor: '#007bff'
-          // isWorkFromHome ? '#007bff' : '#28a745',
-        });
-      }
-
-      // Move to the next day
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-
-    // Handle recurrences (if applicable)
-    recurrences.forEach((recurrence) => {
-      if (recurrence.event_id) {
-        let recurrenceDate = new Date(start);
-        while (recurrenceDate <= new Date(recurrence.end_date)) {
-          // Adjust event generation logic based on recurrence frequency and interval
-          if (recurrence.frequency === 'weekly') {
-            // Weekly recurrence logic
-          } else if (recurrence.frequency === 'monthly') {
-            // Monthly recurrence logic
-          }
-
-          // Move to next recurrence date based on interval
-          recurrenceDate.setDate(recurrenceDate.getDate() + recurrence.interval);
+          continue
         }
+
+        // Check if current day is part of planning
+        if (days_of_the_week.includes(dayOfWeek)) {
+          const shiftStart = new Date(currentDate)
+          const shiftEnd = new Date(currentDate)
+
+          const [startHour, startMinute] = start_time.split(':').map(Number)
+          const [endHour, endMinute] = end_time.split(':').map(Number)
+
+          shiftStart.setHours(startHour, startMinute, 0)
+          shiftEnd.setHours(endHour, endMinute, 0)
+
+          events.push({
+            id: `${employee.employee_id}-${currentDateStr}-${start_time}`,
+            resource_id: `${employee.employee_id}`,
+            title: `${employee.first_name} ${employee.last_name}`,
+            start: shiftStart.toISOString(),
+            end: shiftEnd.toISOString(),
+            status: status,
+            backgroundColor: '#007bff',
+          })
+        }
+
+        // Move to the next day
+        currentDate.setDate(currentDate.getDate() + 1)
       }
-    });
-  });
 
-  console.log(events);
-  return events;
+      // Handle recurrences (if applicable)
+      recurrences.forEach((recurrence) => {
+        if (recurrence.event_id) {
+          let recurrenceDate = new Date(start)
+          while (recurrenceDate <= new Date(recurrence.end_date)) {
+            // Adjust event generation logic based on recurrence frequency and interval
+            if (recurrence.frequency === 'weekly') {
+              // Weekly recurrence logic
+            } else if (recurrence.frequency === 'monthly') {
+              // Monthly recurrence logic
+            }
+
+            // Move to next recurrence date based on interval
+            recurrenceDate.setDate(recurrenceDate.getDate() + recurrence.interval)
+          }
+        }
+      })
+    })
+
+    console.log(events)
+    // return events
+  })
 }
-
-
-
-
-
 
 function generateRecurringEvents(events) {
   const recurringEvents = []
@@ -357,8 +350,6 @@ function generateRecurringEvents(events) {
   return recurringEvents
 }
 
-
-
 // const employees = [
 //   {
 //     id: '1',
@@ -394,9 +385,17 @@ function generateRecurringEvents(events) {
 //     },
 //   },
 // ]
-
+ generateEmployeeSchedules(
+    employees,
+    plannings,
+    holidays,
+    recurrences,
+  
+    '2024-01-01',
+    '2024-12-31',
+  )
 export const INITIAL_EVENTS = [
-  ...await generateEmployeeSchedules(employees, plannings,recurrences,  holidays, '2024-11-01', '2024-11-31'),
+ 
   //  ...generateRecurringEvents(events),
   ...events,
   {
