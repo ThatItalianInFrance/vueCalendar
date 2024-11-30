@@ -3,7 +3,13 @@ import FullCalendar from '@fullcalendar/vue3'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
-import { INITIAL_EVENTS, fetchEventsFromAPI, fetchEmployeesFromAPI, fetchHolidaysFromAPI } from '../utils/event-utils' // Assume these are imported properly
+import bootstrap5Plugin from '@fullcalendar/bootstrap5'
+import {
+  INITIAL_EVENTS,
+  fetchEventsFromAPI,
+  fetchEmployeesFromAPI,
+  fetchHolidaysFromAPI,
+} from '../utils/event-utils' // Assume these are imported properly
 // import {} from '../utils/'
 export default {
   components: {
@@ -11,6 +17,7 @@ export default {
   },
   data() {
     return {
+      themeSystem: 'bootstrap5',
       filteredResources: [], // Dynamic list of filtered resources
       filteredEvents: [],
       allResources: [],
@@ -33,7 +40,7 @@ export default {
         },
       ],
       calendarOptions: {
-        plugins: [resourceTimelinePlugin, interactionPlugin],
+        plugins: [resourceTimelinePlugin, interactionPlugin, bootstrap5Plugin],
         initialView: 'resourceTimelineWeek',
         dateClick: this.handleDateClick,
         eventClick: function (info) {
@@ -65,22 +72,22 @@ export default {
     // Initialize data by fetching events, employees, and holidays
     async initializeData() {
       try {
-        const events = INITIAL_EVENTS;
+        const events = INITIAL_EVENTS
         // const events = await fetchEventsFromAPI();
-        const employees = await fetchEmployeesFromAPI();
-        const holidays = await fetchHolidaysFromAPI();
+        const employees = await fetchEmployeesFromAPI()
+        const holidays = await fetchHolidaysFromAPI()
         console.log(events)
         // Generate employee resources
-        this.allResources = employees.map(employee => ({
+        this.allResources = employees.map((employee) => ({
           id: employee.employee_id,
           title: `${employee.first_name} ${employee.last_name}`,
           department: employee.department,
           logo: employee.logo || 'https://placeholder.com/30?text=TB',
-        }));
+        }))
 
         // Map events to the format FullCalendar expects
         const eventArray = [
-          ...events.map(event => ({
+          ...events.map((event) => ({
             id: event.id,
             resourceId: event.resource_id,
             title: event.title,
@@ -88,7 +95,7 @@ export default {
             end: event.end,
             backgroundColor: event.backgroundColor || '#007bff', // Default color
           })),
-          ...holidays.map(holiday => ({
+          ...holidays.map((holiday) => ({
             id: `holiday-${holiday.holiday_id}`,
             resourceId: 'holiday', // Special resource for holidays
             title: holiday.name,
@@ -96,67 +103,69 @@ export default {
             end: holiday.holiday_date,
             backgroundColor: '#28a745', // Color for holidays
           })),
-        ];
+        ]
 
         // Set the fetched data to FullCalendar options
-        this.filteredResources = [...this.allResources]; // Initially show all resources
+        this.filteredResources = [...this.allResources] // Initially show all resources
         // console.log(this.allResources);
-        
-        this.filteredEvents = eventArray;
 
-        this.calendarOptions.events = this.filteredEvents;
-        this.calendarOptions.resources = this.filteredResources;
+        this.filteredEvents = eventArray
 
+        this.calendarOptions.events = this.filteredEvents
+        this.calendarOptions.resources = this.filteredResources
       } catch (error) {
-        console.error('Error initializing data:', error);
+        console.error('Error initializing data:', error)
       }
     },
 
     // Fetch events from database API
     async fetchDatabaseEvents() {
       try {
-        const response = await fetch('http://localhost:3000/api/events'); // Adjust API endpoint
-        const data = await response.json();
-        
-        this.filteredEvents = data.map(event => ({
+        const response = await fetch('http://localhost:3000/api/events') // Adjust API endpoint
+        const data = await response.json()
+
+        this.filteredEvents = data.map((event) => ({
           id: event.id.toString(),
           resourceId: event.employee_id.toString(),
           title: `${event.first_name} ${event.last_name} - ${event.event_type}`,
           start: `${event.date}T${event.start_time}`,
           end: `${event.date}T${event.end_time}`,
           backgroundColor: event.event_type === 'Swipe In' ? '#007bff' : '#dc3545', // Example coloring logic
-        }));
-        this.calendarOptions.events = this.filteredEvents;
+        }))
+        this.calendarOptions.events = this.filteredEvents
       } catch (error) {
-        console.error('Error fetching events:', error);
+        console.error('Error fetching events:', error)
       }
     },
 
     // Filter resources based on department
     filterResources(department) {
-      console.log(department);
-      console.log("this");
-      
+      console.log(department)
+      console.log('this')
+
       if (!department) {
-        this.filteredResources = this.allResources;
-        console.log(this.filteredResources);
-        
+        this.filteredResources = this.allResources
+        console.log(this.filteredResources)
       } else {
-        this.filteredResources = this.allResources.filter(resource => resource.department === department);
+        this.filteredResources = this.allResources.filter(
+          (resource) => resource.department === department,
+        )
       }
-      this.calendarOptions.resources = this.filteredResources;
+      this.calendarOptions.resources = this.filteredResources
     },
 
     // Filter events by type (planning or swipe events)
     filterEvents(type) {
       if (type === 'planning') {
-        this.filteredEvents = this.filteredEvents.filter(event => event.title.includes('Planning'));
+        this.filteredEvents = this.filteredEvents.filter((event) =>
+          event.title.includes('Planning'),
+        )
       } else if (type === 'swipes') {
-        this.filteredEvents = this.swipeEvents;
+        this.filteredEvents = this.swipeEvents
       } else {
-        this.filteredEvents = [];
+        this.filteredEvents = []
       }
-      this.calendarOptions.events = this.filteredEvents;
+      this.calendarOptions.events = this.filteredEvents
     },
 
     handleDateClick(arg) {
@@ -165,13 +174,13 @@ export default {
           title: 'New Event',
           start: arg.date,
           allDay: arg.allDay,
-        });
+        })
       }
     },
   },
 
   created() {
-    this.initializeData(); // Fetch data when component is created
+    this.initializeData() // Fetch data when component is created
   },
 }
 </script>

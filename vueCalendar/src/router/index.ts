@@ -18,6 +18,31 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
     {
+      path: '/newplanning',
+      name: 'newplanning',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/NewPlanningView.vue'),
+    },
+    {
+      path: '/employee',
+      name: 'employee',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/EmployeeManagementView.vue'),
+    },
+    {
+      path: '/newevent',
+      name: 'newevent',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/NewEventView.vue'),
+    },
+
+    {
       path: '/scheduler',
       name: 'scheduler',
       // route level code-splitting

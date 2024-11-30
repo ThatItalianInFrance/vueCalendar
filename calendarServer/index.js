@@ -1,8 +1,8 @@
 // app.js or server.js
 
 const express = require('express');
-const apiRoutes = require('./routes/api');
 const cors = require('cors');  // Import CORS middleware
+const apiRoutes = require('./routes/api');
 
 const app = express();
 const port = process.env.PORT || 3000;

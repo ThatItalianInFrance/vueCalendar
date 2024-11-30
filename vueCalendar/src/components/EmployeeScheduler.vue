@@ -4,12 +4,7 @@
     <div v-if="!isCalendarReady" class="flex items-center justify-center h-full">
       Loading calendar...
     </div>
-    <FullCalendar
-      v-else
-      ref="fullCalendarRef"
-      :options="calendarOptions"
-      class="w-full h-full"
-    />
+    <FullCalendar v-else ref="fullCalendarRef" :options="calendarOptions" class="w-full h-full" />
   </div>
 </template>
 
@@ -24,21 +19,21 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 export default defineComponent({
   name: 'EmployeeScheduler',
   components: {
-    FullCalendar
+    FullCalendar,
   },
   props: {
     initialEmployees: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     initialHolidays: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     initialRecurringEvents: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   setup(props, { emit }) {
     const fullCalendarRef = ref(null)
@@ -51,20 +46,15 @@ export default defineComponent({
     const createEventId = () => String(eventGuid.value++)
 
     const resources = computed(() => {
-      return employees.value.map(employee => ({
+      return employees.value.map((employee) => ({
         id: employee.id || createEventId(),
         title: employee.name || 'Unnamed Employee',
-        role: employee.role || 'No Role Assigned'
+        role: employee.role || 'No Role Assigned',
       }))
     })
 
     const calendarOptions = computed(() => ({
-      plugins: [
-        dayGridPlugin,
-        timeGridPlugin,
-        interactionPlugin,
-        resourceTimelinePlugin
-      ],
+      plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin],
       initialView: 'resourceTimelineDay',
       schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
       resources: resources.value,
@@ -79,14 +69,14 @@ export default defineComponent({
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
-        right: 'resourceTimelineDay,resourceTimelineWeek'
+        right: 'resourceTimelineDay,resourceTimelineWeek',
       },
       events: getEvents,
       eventContent: renderEventContent,
       datesSet: (dateInfo) => emit('dates-set', dateInfo),
       eventClick: (info) => emit('event-click', info),
       select: (info) => emit('select', info),
-      eventChange: (info) => emit('event-change', info)
+      eventChange: (info) => emit('event-change', info),
     }))
 
     function renderEventContent(eventInfo) {
@@ -97,7 +87,7 @@ export default defineComponent({
               <div class="fc-event-title fc-sticky">${eventInfo.event.title}</div>
             </div>
           </div>
-        `
+        `,
       }
     }
 
@@ -109,7 +99,7 @@ export default defineComponent({
         const events = [
           ...generateBasicEvents(start, end),
           ...generateHolidayEvents(start, end),
-          ...generateRecurringEvents(start, end)
+          ...generateRecurringEvents(start, end),
         ]
 
         successCallback(events)
@@ -121,7 +111,7 @@ export default defineComponent({
 
     const generateBasicEvents = (start, end) => {
       const events = []
-      employees.value.forEach(employee => {
+      employees.value.forEach((employee) => {
         if (!employee.schedule) return
 
         const { schedule } = employee
@@ -130,7 +120,7 @@ export default defineComponent({
 
         while (currentDate <= endDate) {
           const dayOfWeek = currentDate.getDay()
-          
+
           if (schedule.defaultShift?.daysOfWeek?.includes(dayOfWeek)) {
             const shiftStart = new Date(currentDate)
             const shiftEnd = new Date(currentDate)
@@ -148,12 +138,12 @@ export default defineComponent({
               title: `${employee.name} - Regular Shift`,
               start: shiftStart.toISOString(),
               end: shiftEnd.toISOString(),
-              backgroundColor: '#28a745'
+              backgroundColor: '#28a745',
             })
 
             // Add break events if they exist
             if (schedule.defaultShift.breaks) {
-              schedule.defaultShift.breaks.forEach(breakTime => {
+              schedule.defaultShift.breaks.forEach((breakTime) => {
                 const breakStart = new Date(currentDate)
                 const breakEnd = new Date(currentDate)
 
@@ -169,7 +159,7 @@ export default defineComponent({
                   title: 'Break',
                   start: breakStart.toISOString(),
                   end: breakEnd.toISOString(),
-                  backgroundColor: '#6c757d'
+                  backgroundColor: '#6c757d',
                 })
               })
             }
@@ -184,24 +174,24 @@ export default defineComponent({
 
     const generateHolidayEvents = (start, end) => {
       return holidays.value
-        .filter(holiday => {
+        .filter((holiday) => {
           const holidayDate = new Date(holiday.date)
           return holidayDate >= start && holidayDate <= end
         })
-        .map(holiday => ({
+        .map((holiday) => ({
           id: createEventId(),
           title: `Holiday - ${holiday.name}`,
           start: holiday.date,
           allDay: true,
           backgroundColor: '#dc3545',
-          display: 'background'
+          display: 'background',
         }))
     }
 
     const generateRecurringEvents = (start, end) => {
-      return recurringEvents.value.map(event => ({
+      return recurringEvents.value.map((event) => ({
         ...event,
-        id: createEventId()
+        id: createEventId(),
       }))
     }
 
@@ -214,9 +204,9 @@ export default defineComponent({
     return {
       fullCalendarRef,
       isCalendarReady,
-      calendarOptions
+      calendarOptions,
     }
-  }
+  },
 })
 </script>
 

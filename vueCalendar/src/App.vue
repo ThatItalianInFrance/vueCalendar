@@ -1,4 +1,12 @@
 <script setup lang="ts">
+// import 'jquery/src/jquery.js'
+// import 'popper.js/dist/popper.min.js';
+// import 'bootstrap/dist/js/bootstrap.min.js'
+
+// import bootstrap stylesheets directly from your JS
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-icons/font/bootstrap-icons.css' // needs additional webpack config!
+
 import { RouterLink, RouterView } from 'vue-router'
 import Sidebar from './components/Sidebar.vue'
 </script>
@@ -24,7 +32,6 @@ import Sidebar from './components/Sidebar.vue'
   </div>
 </template>
 
-
 <style scoped>
 .app-container {
   display: flex;
@@ -37,4 +44,3 @@ import Sidebar from './components/Sidebar.vue'
   background: #fff;
 }
 </style>
-

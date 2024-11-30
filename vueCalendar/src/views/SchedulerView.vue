@@ -1,4 +1,3 @@
-
 <template>
   <div class="container mx-auto p-4">
     <EmployeeScheduler
@@ -15,7 +14,7 @@ import EmployeeScheduler from '../components/EmployeeScheduler.vue'
 
 export default {
   components: {
-    EmployeeScheduler
+    EmployeeScheduler,
   },
   setup() {
     const employees = ref([
@@ -27,19 +26,19 @@ export default {
           defaultShift: {
             start: '09:00',
             end: '17:00',
-            daysOfWeek: [1, 2, 3, 4, 5]
+            daysOfWeek: [1, 2, 3, 4, 5],
           },
-          exceptions: []
-        }
-      }
+          exceptions: [],
+        },
+      },
     ])
 
     const holidays = ref([
       {
         id: 'h1',
         name: 'Christmas',
-        date: '2024-12-25'
-      }
+        date: '2024-12-25',
+      },
     ])
 
     const recurringEvents = ref([])
@@ -47,8 +46,8 @@ export default {
     return {
       employees,
       holidays,
-      recurringEvents
+      recurringEvents,
     }
-  }
+  },
 }
 </script>

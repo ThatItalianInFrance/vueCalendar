@@ -11,8 +11,10 @@ const recurrencesController = require('../controllers/recurrencesController');
 
 // Define routes
 router.get('/recurrences', recurrencesController.fetchRecurrences);
-router.get('/events', eventController.fetchEvents);
+router.get('/events', eventController.getAllEvents);
+router.post('/events', eventController.createEvent);
 router.get('/plannings', planningsController.fetchPlannings);
+router.post('/newplanning', planningsController.createPlanning);
 router.get('/employees', employeeController.fetchEmployees);
 router.get('/holidays', holidayController.fetchHolidays);
 router.get('/resources', resourceController.fetchResources);
