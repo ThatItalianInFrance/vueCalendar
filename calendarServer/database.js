@@ -33,7 +33,7 @@ module.exports = {
     });
   }
 };
-
+// /*
 // -- --------------------------------------------------------
 // -- Host:                         127.0.0.1
 // -- Server version:               8.0.30 - MySQL Community Server - GPL
@@ -62,17 +62,19 @@ module.exports = {
 //   `last_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
 //   `email` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
 //   `hire_date` date DEFAULT NULL,
-//   `department` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+//   `group_id` int DEFAULT NULL,
 //   `logo` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-//   PRIMARY KEY (`employee_id`)
+//   PRIMARY KEY (`employee_id`),
+//   KEY `Index 2` (`group_id`),
+//   CONSTRAINT `FK_employees_groups` FOREIGN KEY (`group_id`) REFERENCES `groupe` (`group_id`)
 // ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 // -- Dumping data for table testplanning.employees: ~4 rows (approximately)
-// INSERT INTO `employees` (`employee_id`, `first_name`, `last_name`, `email`, `hire_date`, `department`, `logo`) VALUES
-// 	(1, 'Jean', 'Dupont', 'jean.dupont@example.com', '2024-01-15', 'Groupe A', 'https://placeholder.com/30?text=TB'),
-// 	(2, 'Marie', 'Curie', 'marie.curie@example.com', '2023-07-20', 'Groupe B', 'https://placeholder.com/30?text=TB'),
-// 	(3, 'Émile', 'Zola', 'emile.zola@example.com', '2022-09-12', 'Groupe A', 'https://placeholder.com/30?text=TB'),
-// 	(4, 'Claire', 'Fontaine', 'claire.fontaine@example.com', '2024-03-10', 'Groupe C', 'https://placeholder.com/30?text=TB');
+// INSERT INTO `employees` (`employee_id`, `first_name`, `last_name`, `email`, `hire_date`, `group_id`, `logo`) VALUES
+// 	(1, 'Jean', 'Dupont', 'jean.dupont@example.com', '2024-01-15', 1, 'https://placeholder.com/30?text=TB'),
+// 	(2, 'Marie', 'Curie', 'marie.curie@example.com', '2023-07-20', 1, 'https://placeholder.com/30?text=TB'),
+// 	(3, 'Émile', 'Zola', 'emile.zola@example.com', '2022-09-12', 1, 'https://placeholder.com/30?text=TB'),
+// 	(4, 'Claire', 'Fontaine', 'claire.fontaine@example.com', '2024-03-10', 1, 'https://placeholder.com/30?text=TB');
 
 // -- Dumping structure for table testplanning.events
 // CREATE TABLE IF NOT EXISTS `events` (
@@ -84,9 +86,9 @@ module.exports = {
 //   `status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
 //   `background_color` varchar(7) COLLATE utf8mb4_general_ci DEFAULT NULL,
 //   PRIMARY KEY (`id`)
-// ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+// ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-// -- Dumping data for table testplanning.events: ~17 rows (approximately)
+// -- Dumping data for table testplanning.events: ~19 rows (approximately)
 // INSERT INTO `events` (`id`, `resource_id`, `title`, `start`, `end`, `status`, `background_color`) VALUES
 // 	(1, 1, 'Réunion Mensuelle', '2024-11-20 09:00:00', '2024-11-20 11:00:00', NULL, '#2196F3'),
 // 	(2, 1, 'Code review', '2024-11-21 09:00:00', '2024-11-20 11:00:00', NULL, '#2196F3'),
@@ -104,7 +106,8 @@ module.exports = {
 // 	(21, 4, 'Planification Mensuelle', '2024-11-23 13:00:00', '2024-11-23 15:00:00', NULL, '#4CAF50'),
 // 	(22, 1, 'test', '2024-11-29 11:00:00', '2024-11-29 11:40:00', NULL, NULL),
 // 	(23, 1, 'test', '2024-11-29 11:00:00', '2024-11-29 11:40:00', NULL, NULL),
-// 	(24, 2, 'stoca', '2024-11-29 10:11:00', '2024-11-29 11:11:00', NULL, NULL);
+// 	(24, 2, 'stoca', '2024-11-29 10:11:00', '2024-11-29 11:11:00', NULL, NULL),
+// 	(25, 2, 'reminder', '2024-12-02 09:00:00', '2024-12-02 11:00:00', NULL, NULL);
 
 // -- Dumping structure for table testplanning.exceptions
 // CREATE TABLE IF NOT EXISTS `exceptions` (
@@ -119,6 +122,18 @@ module.exports = {
 // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 // -- Dumping data for table testplanning.exceptions: ~0 rows (approximately)
+
+// -- Dumping structure for table testplanning.groupe
+// CREATE TABLE IF NOT EXISTS `groupe` (
+//   `group_id` int NOT NULL AUTO_INCREMENT,
+//   `group_name` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+//   `group_description` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+//   KEY `Index 1` (`group_id`)
+// ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+// -- Dumping data for table testplanning.groupe: ~0 rows (approximately)
+// INSERT INTO `groupe` (`group_id`, `group_name`, `group_description`) VALUES
+// 	(1, 'test', 'test');
 
 // -- Dumping structure for table testplanning.holidays
 // CREATE TABLE IF NOT EXISTS `holidays` (
@@ -152,6 +167,9 @@ module.exports = {
 //   `end_time` time NOT NULL,
 //   `status` enum('scheduled','modified','cancelled') COLLATE utf8mb4_general_ci DEFAULT 'scheduled',
 //   `days_of_the_week` varchar(250) COLLATE utf8mb4_general_ci DEFAULT NULL,
+//   `weeks_of_the_month` varchar(250) COLLATE utf8mb4_general_ci DEFAULT NULL,
+//   `months_of_the_year` varchar(250) COLLATE utf8mb4_general_ci DEFAULT NULL,
+//   `years` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
 //   PRIMARY KEY (`planning_id`),
 //   KEY `employee_id` (`employee_id`),
 //   KEY `event_id` (`event_id`),
@@ -160,9 +178,10 @@ module.exports = {
 // ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 // -- Dumping data for table testplanning.plannings: ~2 rows (approximately)
-// INSERT INTO `plannings` (`planning_id`, `employee_id`, `event_id`, `date`, `start_time`, `end_time`, `status`, `days_of_the_week`) VALUES
-// 	(1, 1, 2, '2024-01-15', '07:00:00', '10:00:00', 'scheduled', '[1,2,3,4,5]'),
-// 	(2, 1, 3, '2024-11-27', '06:56:12', '09:56:18', 'scheduled', '[2,4]');
+// INSERT INTO `plannings` (`planning_id`, `employee_id`, `event_id`, `date`, `start_time`, `end_time`, `status`, `days_of_the_week`, `weeks_of_the_month`, `months_of_the_year`, `years`) VALUES
+// 	(1, 1, 2, '2024-01-15', '07:00:00', '10:00:00', 'scheduled', '[1,2,3,4,5]', '[1,3,5]', '[0,1,2,3,4,5,6,7,8,9,10,11,12]', NULL),
+// 	(2, 2, 3, '2024-11-27', '10:00:02', '12:00:00', 'scheduled', '[1, 2,4]', '[2,4]', '[0,1,2,3,4,5,6,7,8,9,10,11,12]', NULL),
+// 	(3, 2, NULL, '2024-12-01', '12:37:13', '15:37:15', 'scheduled', '[1, 2,4]', '[2,4]', '', NULL);
 
 // -- Dumping structure for table testplanning.recurrences
 // CREATE TABLE IF NOT EXISTS `recurrences` (

@@ -6,8 +6,13 @@
       <div class="mb-3">
         <label for="employee_id" class="form-label">Employee</label>
         <select class="form-select" id="employee_id" v-model="form.employee_id" required>
-          <option v-for="employee in employees" :key="employee.employee_id" :value="employee.employee_id">
-            {{ employee.first_name }} <!-- Replace with your employee name field -->
+          <option
+            v-for="employee in employees"
+            :key="employee.employee_id"
+            :value="employee.employee_id"
+          >
+            {{ employee.first_name }}
+            <!-- Replace with your employee name field -->
           </option>
         </select>
       </div>
@@ -27,7 +32,13 @@
       <!-- Start Time -->
       <div class="mb-3">
         <label for="start_time" class="form-label">Start Time</label>
-        <input type="time" class="form-control" id="start_time" v-model="form.start_time" required />
+        <input
+          type="time"
+          class="form-control"
+          id="start_time"
+          v-model="form.start_time"
+          required
+        />
       </div>
 
       <!-- End Time -->
@@ -46,23 +57,54 @@
         </select>
       </div>
 
-      <!-- Days of the Week Selector -->
+      <!-- Weeks of the Month Selector -->
       <div class="mb-3">
-        <label for="days_of_the_week" class="form-label">Days of the Week</label>
+        <label for="weeks_of_the_month" class="form-label">Weeks of the Month</label>
         <div class="d-flex flex-wrap">
-          <div class="form-check me-3" v-for="day in daysOptions" :key="day.value">
+          <div class="form-check me-3" v-for="week in weekOptions" :key="week.value">
             <input
               class="form-check-input"
               type="checkbox"
-              :value="day.value"
-              v-model="form.days_of_the_week"
-              :id="`day_${day.value}`"
+              :value="week.value"
+              v-model="form.weeks_of_the_month"
+              :id="`week_${week.value}`"
             />
-            <label class="form-check-label" :for="`day_${day.value}`">
-              {{ day.label }}
+            <label class="form-check-label" :for="`week_${week.value}`">
+              {{ week.label }}
             </label>
           </div>
         </div>
+      </div>
+
+      <!-- Months of the Year Selector -->
+      <div class="mb-3">
+        <label for="months_of_the_year" class="form-label">Months of the Year</label>
+        <div class="d-flex flex-wrap">
+          <div class="form-check me-3" v-for="month in monthOptions" :key="month.value">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              :value="month.value"
+              v-model="form.months_of_the_year"
+              :id="`month_${month.value}`"
+            />
+            <label class="form-check-label" :for="`month_${month.value}`">
+              {{ month.label }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Year Selector -->
+      <div class="mb-3">
+        <label for="years" class="form-label">Years</label>
+        <input
+          type="text"
+          class="form-control"
+          id="years"
+          v-model="form.years"
+          placeholder="Enter years, separated by commas"
+        />
       </div>
 
       <button type="submit" class="btn btn-primary">Create Planning</button>
@@ -71,7 +113,7 @@
 </template>
 
 <script>
-import apiClient from "../utils/axios.js"
+import apiClient from '../utils/axios.js'
 
 export default {
   name: 'CreatePlanningForm',
@@ -95,6 +137,28 @@ export default {
         { value: 4, label: 'Thursday' },
         { value: 5, label: 'Friday' },
         { value: 6, label: 'Saturday' },
+      ],
+      weekOptions: [
+        { value: 1, label: 'Week 1' },
+        { value: 2, label: 'Week 2' },
+        { value: 3, label: 'Week 3' },
+        { value: 4, label: 'Week 4' },
+        { value: 5, label: 'Week 5' },
+      ],
+      monthOptions: [
+        { value: 0, label: 'January' },
+        { value: 1, label: 'February' },
+        { value: 2, label: 'March' },
+        { value: 3, label: 'April' },
+        { value: 4, label: 'May' },
+        { value: 5, label: 'June' },
+        { value: 6, label: 'July' },
+        { value: 7, label: 'August' },
+        { value: 8, label: 'September' },
+        { value: 9, label: 'October' },
+        { value: 10, label: 'November' },
+        // Continue for all months...
+        { value: 11, label: 'December' },
       ],
     }
   },
@@ -154,4 +218,3 @@ export default {
   margin-bottom: 8px;
 }
 </style>
-

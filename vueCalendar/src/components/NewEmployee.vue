@@ -21,7 +21,7 @@
           <td>{{ employee.first_name }}</td>
           <td>{{ employee.last_name }}</td>
           <td>{{ employee.email }}</td>
-          <td>{{ employee.department }}</td>
+          <td>{{ employee.group_id }}</td>
           <td>
             <button @click="editEmployee(employee)" class="btn btn-sm btn-warning">Edit</button>
             <button @click="deleteEmployee(employee.employee_id)" class="btn btn-sm btn-danger ms-2">Delete</button>
@@ -45,7 +45,7 @@
             <input v-model="form.email" type="email" class="form-control" placeholder="Email" required />
           </div>
           <div class="mb-3">
-            <input v-model="form.department" type="text" class="form-control" placeholder="Department" required />
+            <input v-model="form.group_id" type="text" class="form-control" placeholder="Department" required />
           </div>
           <button type="submit" class="btn btn-success">{{ isEditing ? 'Update' : 'Add' }}</button>
         </form>
@@ -74,8 +74,13 @@ export default {
   methods: {
     async fetchEmployees() {
       try {
-        const response = await axios.get('/api/employees');
-        this.employees = response.data;
+        const [employeeResponse, groupResponse] = await Promise.all([
+        axios.get('http://localhost:3000/api/employees'),
+        axios.get('http://localhost:3000/api/groups'),  // Fetch groups
+      ]);
+
+      this.employees = employeeResponse.data;
+      this.groups = groupResponse.data;
       } catch (error) {
         console.error('Error fetching employees:', error);
       }
@@ -117,6 +122,18 @@ export default {
       this.form = { first_name: '', last_name: '', email: '', department: '' };
     },
   },
+  computed: {
+  // Method to get group name by ID
+  employeeWithGroupName() {
+    return this.employees.map(emp => {
+      const group = this.groups.find(g => g.group_id === emp.group_id);
+      return {
+        ...emp,
+        group_name: group ? group.name : 'Unknown',  // Replace ID with name
+      };
+    });
+  }
+}
 };
 </script>
 

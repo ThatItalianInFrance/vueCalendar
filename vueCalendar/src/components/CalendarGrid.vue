@@ -40,6 +40,8 @@ export default {
   methods: {
     handleDateClick(arg) {
       alert('Date clicked: ' + arg.dateStr)
+      console.log(INITIAL_EVENTS);
+      console.log("this");
     },
     closeModal() {
       this.showModal = false  // Hide the modal

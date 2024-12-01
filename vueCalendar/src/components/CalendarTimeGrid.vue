@@ -18,6 +18,7 @@ export default {
           alert('Event: ' + info.event.title)
           alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY)
           alert('View: ' + info.view.type)
+console.log(INITIAL_EVENTS);
 
           // change the border color just for fun
           info.el.style.borderColor = 'red'
@@ -41,6 +42,9 @@ export default {
   methods: {
     handleDateClick: function (arg) {
       alert('date click! ' + arg.dateStr)
+
+      
+      
     },
   },
 }
