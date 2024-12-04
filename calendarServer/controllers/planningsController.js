@@ -35,6 +35,8 @@ exports.fetchPlanningById = async (req, res) => {
 exports.createPlanning = async (req, res) => {
   try {
     const planningData = req.body;
+    console.log(req.body);
+    
     const newPlanning = await createPlanning(planningData);
     res.status(201).json(newPlanning);
   } catch (error) {

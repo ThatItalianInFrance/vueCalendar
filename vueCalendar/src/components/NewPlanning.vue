@@ -4,23 +4,23 @@
     <form @submit.prevent="submitForm">
       <!-- Employee Selection -->
       <div class="mb-3">
-        <label for="employee_id" class="form-label">Employee</label>
-        <select class="form-select" id="employee_id" v-model="form.employee_id" required>
+        <label for="group_id" class="form-label">Group</label>
+        <select class="form-select" id="group_id" v-model="form.group_id" >
           <option
-            v-for="employee in employees"
-            :key="employee.employee_id"
-            :value="employee.employee_id"
+            v-for="group in groups"
+            :key="group.group_id"
+            :value="group.group_id"
           >
-            {{ employee.first_name }}
-            <!-- Replace with your employee name field -->
+            {{ group.group_name }}
+            <!-- Replace with your group name field -->
           </option>
+          <option :value="null">no group</option>
         </select>
       </div>
 
-      <!-- Event ID -->
       <div class="mb-3">
-        <label for="event_id" class="form-label">Event ID</label>
-        <input type="number" class="form-control" id="event_id" v-model="form.event_id" />
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="date" v-model="form.name" required />
       </div>
 
       <!-- Date -->
@@ -114,21 +114,26 @@
 
 <script>
 import apiClient from '../utils/axios.js'
+import axios from 'axios'
 
 export default {
   name: 'CreatePlanningForm',
   data() {
     return {
       form: {
-        employee_id: '',
-        event_id: '',
+        planning_name: '',
+        group_id: null,
+        
+      
         date: '',
         start_time: '',
         end_time: '',
         status: 'scheduled',
         days_of_the_week: [], // Store as an array
+        weeks_of_the_month: [], // Store as an array
+        months_of_the_year: [], // Store as an array
       },
-      employees: [], // Employee list fetched from API
+      groups: [], // Employee list fetched from API
       daysOptions: [
         { value: 0, label: 'Sunday' },
         { value: 1, label: 'Monday' },
@@ -163,48 +168,55 @@ export default {
     }
   },
   methods: {
-    async fetchEmployees() {
+    async fetchGroups() {
       try {
-        const response = await apiClient.get('api/employees')
-        this.employees = response.data // Ensure the endpoint returns an array of employees
+        const response = await apiClient.get('api/groups')
+        this.groups = response.data // Ensure the endpoint returns an array of employees
       } catch (error) {
-        console.error('Error fetching employees:', error)
-        alert('Failed to load employees.')
+        console.error('Error fetching groups:', error)
+        alert('Failed to load groups.')
       }
     },
     async submitForm() {
       try {
         const planningData = {
           ...this.form,
-          days_of_the_week: JSON.stringify(this.form.days_of_the_week), // Convert array to JSON string
+          days_of_the_week: JSON.stringify(this.form.days_of_the_week),
+  weeks_of_the_month: JSON.stringify(this.form.weeks_of_the_month),
+  months_of_the_year: JSON.stringify(this.form.months_of_the_year),
         }
 
         // Send data to the backend
-        const response = await apiClient.post('/api/plannings', planningData)
+        console.log(planningData);
+        
+        const response = await axios.post('http://localhost:3000/api/newplanning', planningData)
+        // const response = await apiClient.post('/api/newplanning', planningData)
         console.log('Planning created successfully:', response.data)
         alert('Planning created successfully!')
 
         // Optionally reset the form
         this.resetForm()
       } catch (error) {
-        console.error('Error creating planning:', error)
-        alert('Failed to create planning.')
-      }
+        console.error('Error creating planning:', error.response.data)
+        alert('Failed to create planning.' +  (error.response?.data?.message || 'Unknown error.'))}
+      
     },
     resetForm() {
       this.form = {
-        employee_id: '',
-        event_id: '',
+        planning_name: '',
+        group_id: '',
         date: '',
         start_time: '',
         end_time: '',
         status: 'scheduled',
         days_of_the_week: [],
+        weeks_of_the_month: [],
+        months_of_the_year: [],
       }
     },
   },
   created() {
-    this.fetchEmployees() // Fetch employees when the component loads
+    this.fetchGroups() // Fetch employees when the component loads
   },
 }
 </script>

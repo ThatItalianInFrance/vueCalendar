@@ -29,10 +29,13 @@ exports.getPlanningById = async (id) => {
 // Create a new planning
 exports.createPlanning = async (planningData) => {
   try {
-    const { employee_id, event_id, date, start_time, end_time, status, days_of_the_week } = planningData;
+    console.log("this");
+    
+    const { group_id, planning_name, date, start_time, end_time, status, days_of_the_week, weeks_of_the_month, months_of_the_year } = planningData;
     const result = await db.query(
-      'INSERT INTO plannings (employee_id, event_id, date, start_time, end_time, status, days_of_the_week) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [employee_id, event_id, date, start_time, end_time, status, days_of_the_week]
+      'INSERT INTO plannings (group_id, planning_name, date, start_time, end_time, status, days_of_the_week, weeks_of_the_month, months_of_the_year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+
+      [group_id, planning_name, date, start_time, end_time, status, days_of_the_week, weeks_of_the_month, months_of_the_year]
     );
     return { planning_id: result.insertId, ...planningData };
   } catch (error) {

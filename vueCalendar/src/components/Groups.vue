@@ -15,9 +15,9 @@
       </thead>
       <tbody>
         <tr v-for="group in groups" :key="group.id">
-          <td>{{ group.id }}</td>
-          <td>{{ group.name }}</td>
-          <td>{{ group.description }}</td>
+          <td>{{ group.group_id }}</td>
+          <td>{{ group.group_name }}</td>
+          <td>{{ group.group_description }}</td>
           <td>
             <button @click="editGroup(group)" class="btn btn-sm btn-warning">Edit</button>
             <button @click="deleteGroup(group.id)" class="btn btn-sm btn-danger ms-2">Delete</button>
