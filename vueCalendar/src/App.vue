@@ -24,9 +24,9 @@ import Sidebar from './components/Sidebar.vue'
       </nav>
     </div>
   </header> -->
-  <div class="app-container">
+  <div class="app-container d-flex">
     <Sidebar />
-    <main class="content">
+    <main class="content w-100">
       <RouterView />
     </main>
   </div>
@@ -34,12 +34,12 @@ import Sidebar from './components/Sidebar.vue'
 
 <style scoped>
 .app-container {
-  display: flex;
+  /* display: flex; */
   height: 100vh;
 }
 
 .content {
-  flex: 1;
+  /* flex: 1; */
   padding: 20px;
   background: #fff;
 }

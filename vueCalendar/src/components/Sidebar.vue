@@ -19,17 +19,22 @@ const routes = router.getRoutes()
 </template>
 
 <style scoped>
+
 .sidebar {
   width: 200px;
   background: #f4f4f4;
   padding: 15px;
-  height: 100vh;
+  height: 100vh; /* Full height of the viewport */
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  /* position: fixed; Fix it to the left side of the viewport */
+  /* top: 0; */
+  /* left: 0; */
 }
 
 .sidebar ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .sidebar li {
@@ -45,4 +50,16 @@ const routes = router.getRoutes()
 .sidebar a:hover {
   color: #007bff;
 }
+
+/* Ensure the page content adjusts */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+main {
+  margin-left: 200px; /* Adjust the main content to not overlap the sidebar */
+}
 </style>
+

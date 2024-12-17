@@ -1,232 +1,257 @@
 <template>
   <div class="container mt-4">
-    <h2>Create New Planning</h2>
-    <form @submit.prevent="submitForm">
-      <!-- Employee Selection -->
-      <div class="mb-3">
-        <label for="group_id" class="form-label">Group</label>
-        <select class="form-select" id="group_id" v-model="form.group_id" >
-          <option
-            v-for="group in groups"
-            :key="group.group_id"
-            :value="group.group_id"
-          >
-            {{ group.group_name }}
-            <!-- Replace with your group name field -->
-          </option>
-          <option :value="null">no group</option>
-        </select>
-      </div>
+    <h1>Planning Management</h1>
 
-      <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
-        <input type="text" class="form-control" id="date" v-model="form.name" required />
-      </div>
+    <!-- Add/Edit Form -->
+    <div class="card my-4" v-if="showForm">
+      <div class="card-body">
+        <h5 class="card-title">{{ editing ? 'Edit Planning' : 'Add New Planning' }}</h5>
+        <form @submit.prevent="submitForm">
+          <div class="mb-3">
+            <label for="nom" class="form-label">Name</label>
+            <input type="text" id="nom" v-model="form.nom" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" id="description" v-model="form.description" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label for="site_id" class="form-label">Equipe ID</label>
+            <input type="number" id="site_id" v-model="form.equipe_id" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label for="configuration" class="form-label">Configuration (JSON)</label>
+            <textarea id="configuration" v-model="form.configuration" class="form-control"></textarea>
+          </div>
+          <!-- Weekly Start and End Times -->
 
-      <!-- Date -->
-      <div class="mb-3">
-        <label for="date" class="form-label">Date</label>
-        <input type="date" class="form-control" id="date" v-model="form.date" required />
-      </div>
+<!-- Work Times -->
+<div class="row">
+          <div class="col-md-3 mb-3">
+            <label for="lunStart" class="form-label">Monday Start</label>
+            <input v-model="form.lunStart" id="lunStart" type="time" class="form-control" />
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="lunEnd" class="form-label">Monday End</label>
+            <input v-model="form.lunEnd" id="lunEnd" type="time" class="form-control" />
+          </div>
 
-      <!-- Start Time -->
-      <div class="mb-3">
-        <label for="start_time" class="form-label">Start Time</label>
-        <input
-          type="time"
-          class="form-control"
-          id="start_time"
-          v-model="form.start_time"
-          required
-        />
-      </div>
-
-      <!-- End Time -->
-      <div class="mb-3">
-        <label for="end_time" class="form-label">End Time</label>
-        <input type="time" class="form-control" id="end_time" v-model="form.end_time" required />
-      </div>
-
-      <!-- Status -->
-      <div class="mb-3">
-        <label for="status" class="form-label">Status</label>
-        <select class="form-select" id="status" v-model="form.status" required>
-          <option value="scheduled">Scheduled</option>
-          <option value="modified">Modified</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
-      </div>
-
-      <!-- Weeks of the Month Selector -->
-      <div class="mb-3">
-        <label for="weeks_of_the_month" class="form-label">Weeks of the Month</label>
-        <div class="d-flex flex-wrap">
-          <div class="form-check me-3" v-for="week in weekOptions" :key="week.value">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              :value="week.value"
-              v-model="form.weeks_of_the_month"
-              :id="`week_${week.value}`"
-            />
-            <label class="form-check-label" :for="`week_${week.value}`">
-              {{ week.label }}
-            </label>
+          <div class="col-md-3 mb-3">
+            <label for="marStart" class="form-label">Tuesday Start</label>
+            <input v-model="form.marStart" id="marStart" type="time" class="form-control" />
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="marEnd" class="form-label">Tuesday End</label>
+            <input v-model="form.marEnd" id="marEnd" type="time" class="form-control" />
           </div>
         </div>
-      </div>
 
-      <!-- Months of the Year Selector -->
-      <div class="mb-3">
-        <label for="months_of_the_year" class="form-label">Months of the Year</label>
-        <div class="d-flex flex-wrap">
-          <div class="form-check me-3" v-for="month in monthOptions" :key="month.value">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              :value="month.value"
-              v-model="form.months_of_the_year"
-              :id="`month_${month.value}`"
-            />
-            <label class="form-check-label" :for="`month_${month.value}`">
-              {{ month.label }}
-            </label>
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <label for="merStart" class="form-label">Wednesday Start</label>
+            <input v-model="form.merStart" id="merStart" type="time" class="form-control" />
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="merEnd" class="form-label">Wednesday End</label>
+            <input v-model="form.merEnd" id="merEnd" type="time" class="form-control" />
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label for="jeuStart" class="form-label">Thursday Start</label>
+            <input v-model="form.jeuStart" id="jeuStart" type="time" class="form-control" />
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="jeuEnd" class="form-label">Thursday End</label>
+            <input v-model="form.jeuEnd" id="jeuEnd" type="time" class="form-control" />
           </div>
         </div>
-      </div>
 
-      <!-- Year Selector -->
-      <div class="mb-3">
-        <label for="years" class="form-label">Years</label>
-        <input
-          type="text"
-          class="form-control"
-          id="years"
-          v-model="form.years"
-          placeholder="Enter years, separated by commas"
-        />
-      </div>
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <label for="venStart" class="form-label">Friday Start</label>
+            <input v-model="form.venStart" id="venStart" type="time" class="form-control" />
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="venEnd" class="form-label">Friday End</label>
+            <input v-model="form.venEnd" id="venEnd" type="time" class="form-control" />
+          </div>
 
-      <button type="submit" class="btn btn-primary">Create Planning</button>
-    </form>
+          <div class="col-md-3 mb-3">
+            <label for="samStart" class="form-label">Saturday Start</label>
+            <input v-model="form.samStart" id="samStart" type="time" class="form-control" />
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="samEnd" class="form-label">Saturday End</label>
+            <input v-model="form.samEnd" id="samEnd" type="time" class="form-control" />
+          </div>
+        </div>
+          
+          <div class="mb-3 mt-3">
+            <label for="status" class="form-label">Status</label>
+            <select id="status" v-model="form.status" class="form-control">
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary me-2">Save</button>
+          <button type="button" class="btn btn-secondary" @click="cancelEdit">Cancel</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Planning Table -->
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Equipe ID</th>
+          <th>Configuration</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="planning in plannings" :key="planning.id">
+          <td>{{ planning.id }}</td>
+          <td>{{ planning.nom }}</td>
+          <td>{{ planning.description }}</td>
+          <td>{{ planning.site_id }}</td>
+          <td>{{ planning.configuration }}</td>
+          <td>{{ planning.status }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-2" @click="editPlanning(planning)">Edit</button>
+            <button class="btn btn-sm btn-danger" @click="deletePlanning(planning.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Add Button -->
+    <button class="btn btn-success" @click="addNewPlanning">Add New Planning</button>
   </div>
 </template>
 
 <script>
-import apiClient from '../utils/axios.js'
-import axios from 'axios'
+import apiClient from "../utils/axios";
 
 export default {
-  name: 'CreatePlanningForm',
   data() {
     return {
+      plannings: [],
+      showForm: false,
+      editing: false,
+      days: [
+        { name: "lun", label: "Monday", start: "lunStart", end: "lunEnd" },
+        { name: "mar", label: "Tuesday", start: "marStart", end: "marEnd" },
+        { name: "mer", label: "Wednesday", start: "merStart", end: "merEnd" },
+        { name: "jeu", label: "Thursday", start: "jeuStart", end: "jeuEnd" },
+        { name: "ven", label: "Friday", start: "venStart", end: "venEnd" },
+        { name: "sam", label: "Saturday", start: "samStart", end: "samEnd" },
+      ],
       form: {
-        planning_name: '',
-        group_id: null,
-        
-      
-        date: '',
-        start_time: '',
-        end_time: '',
-        status: 'scheduled',
-        days_of_the_week: [], // Store as an array
-        weeks_of_the_month: [], // Store as an array
-        months_of_the_year: [], // Store as an array
+        id: null,
+        nom: "",
+        description: "",
+        site_id: null,
+        configuration: "",
+        lunStart: null,
+        lunEnd: null,
+        marStart: null,
+        marEnd: null,
+        merStart: null,
+        merEnd: null,
+        jeuStart: null,
+        jeuEnd: null,
+        venStart: null,
+        venEnd: null,
+        samStart: null,
+        samEnd: null,
+        status: "active",
       },
-      groups: [], // Employee list fetched from API
-      daysOptions: [
-        { value: 0, label: 'Sunday' },
-        { value: 1, label: 'Monday' },
-        { value: 2, label: 'Tuesday' },
-        { value: 3, label: 'Wednesday' },
-        { value: 4, label: 'Thursday' },
-        { value: 5, label: 'Friday' },
-        { value: 6, label: 'Saturday' },
-      ],
-      weekOptions: [
-        { value: 1, label: 'Week 1' },
-        { value: 2, label: 'Week 2' },
-        { value: 3, label: 'Week 3' },
-        { value: 4, label: 'Week 4' },
-        { value: 5, label: 'Week 5' },
-      ],
-      monthOptions: [
-        { value: 0, label: 'January' },
-        { value: 1, label: 'February' },
-        { value: 2, label: 'March' },
-        { value: 3, label: 'April' },
-        { value: 4, label: 'May' },
-        { value: 5, label: 'June' },
-        { value: 6, label: 'July' },
-        { value: 7, label: 'August' },
-        { value: 8, label: 'September' },
-        { value: 9, label: 'October' },
-        { value: 10, label: 'November' },
-        // Continue for all months...
-        { value: 11, label: 'December' },
-      ],
-    }
+    };
   },
   methods: {
-    async fetchGroups() {
+    async fetchPlannings() {
       try {
-        const response = await apiClient.get('api/groups')
-        this.groups = response.data // Ensure the endpoint returns an array of employees
+        const response = await apiClient.get("/api/plannings");
+        this.plannings = response.data;
       } catch (error) {
-        console.error('Error fetching groups:', error)
-        alert('Failed to load groups.')
+        console.error("Failed to fetch plannings:", error);
+      }
+    },
+    addNewPlanning() {
+      this.resetForm();
+      this.showForm = true;
+      this.editing = false;
+    },
+    editPlanning(planning) {
+      this.form = { ...planning };
+      this.showForm = true;
+      this.editing = true;
+    },
+    async deletePlanning(id) {
+      if (!confirm("Are you sure you want to delete this planning?")) return;
+      try {
+        await apiClient.delete(`/api/plannings/${id}`);
+        this.plannings = this.plannings.filter((p) => p.id !== id);
+      } catch (error) {
+        console.error("Failed to delete planning:", error);
       }
     },
     async submitForm() {
       try {
-        const planningData = {
-          ...this.form,
-          days_of_the_week: JSON.stringify(this.form.days_of_the_week),
-  weeks_of_the_month: JSON.stringify(this.form.weeks_of_the_month),
-  months_of_the_year: JSON.stringify(this.form.months_of_the_year),
+        if (this.editing) {
+          await apiClient.put(`/api/plannings/${this.form.id}`, this.form);
+          // const index = this.plannings.findIndex((p) => p.id === this.form.id);
+          // this.$set(this.plannings, index, { ...this.form });
+        } else {
+          await apiClient.post("/api/newplanning", this.form);
+          // this.plannings.push(response.data);
         }
-
-        // Send data to the backend
-        console.log(planningData);
-        
-        const response = await axios.post('http://localhost:3000/api/newplanning', planningData)
-        // const response = await apiClient.post('/api/newplanning', planningData)
-        console.log('Planning created successfully:', response.data)
-        alert('Planning created successfully!')
-
-        // Optionally reset the form
-        this.resetForm()
+        this.fetchPlannings();
+        this.cancelEdit();
       } catch (error) {
-        console.error('Error creating planning:', error.response.data)
-        alert('Failed to create planning.' +  (error.response?.data?.message || 'Unknown error.'))}
-      
+        console.error("Failed to save planning:", error);
+      }
+    },
+    cancelEdit() {
+      this.resetForm();
+      this.showForm = false;
+      this.editing = false;
     },
     resetForm() {
       this.form = {
-        planning_name: '',
-        group_id: '',
-        date: '',
-        start_time: '',
-        end_time: '',
-        status: 'scheduled',
-        days_of_the_week: [],
-        weeks_of_the_month: [],
-        months_of_the_year: [],
-      }
+        id: null,
+        nom: "",
+        description: "",
+        site_id: null,
+        configuration: "",
+        lunStart: null,
+        lunEnd: null,
+        marStart: null,
+        marEnd: null,
+        merStart: null,
+        merEnd: null,
+        jeuStart: null,
+        jeuEnd: null,
+        venStart: null,
+        venEnd: null,
+        samStart: null,
+        samEnd: null,
+        status: "active",
+      };
     },
   },
-  created() {
-    this.fetchGroups() // Fetch employees when the component loads
+  mounted() {
+    this.fetchPlannings();
   },
-}
+};
 </script>
 
 <style scoped>
-.container {
-  max-width: 600px;
+table {
   margin-top: 20px;
-}
-.form-check {
-  margin-bottom: 8px;
 }
 </style>

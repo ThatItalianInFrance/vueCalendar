@@ -16,6 +16,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 
+
 export default defineComponent({
   name: 'EmployeeScheduler',
   components: {

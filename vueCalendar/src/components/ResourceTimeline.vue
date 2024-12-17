@@ -4,6 +4,8 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import bootstrap5Plugin from '@fullcalendar/bootstrap5'
+import apiClient from '../utils/axios'
+import dayjs from 'dayjs'
 import {
   INITIAL_EVENTS,
   fetchEventsFromAPI,
@@ -41,7 +43,27 @@ export default {
       ],
       calendarOptions: {
         plugins: [resourceTimelinePlugin, interactionPlugin, bootstrap5Plugin],
-        initialView: 'resourceTimelineWeek',
+        // initialView: 'resourceTimelineWeek',
+        initialView: 'resourceTimelineMonSat',
+        views: {
+          resourceTimelineMonSat: {
+            type: 'resourceTimeline',
+            // duration: { days: 4 }
+            visibleRange: function (currentDate) {
+              // Get the current week's Monday and Sunday
+              const startOfWeek = dayjs(currentDate).startOf('week'); // Monday
+              const endOfWeek = dayjs(currentDate).endOf('week'); // Saturday
+
+              return {
+                start: startOfWeek.format('YYYY-MM-DD'),
+                end: endOfWeek.format('YYYY-MM-DD'),
+              };
+            },
+          }
+        },
+        slotMinTime: "04:00",
+        slotMaxTime: "22:00",
+        height: 550,
         dateClick: this.handleDateClick,
         eventClick: function (info) {
           alert('Event: ' + info.event.title)
@@ -70,18 +92,37 @@ export default {
   },
   methods: {
     // Initialize data by fetching events, employees, and holidays
+    async fetchEmployees() {
+      try {
+        const [employeeResponse, equipeResponse] = await Promise.all([
+          apiClient.get('http://localhost:3000/api/employees'),
+
+
+          apiClient.get('http://localhost:3000/api/groups'), // Fetch groups
+        ]);
+        console.log(employeeResponse.data);
+        console.log(equipeResponse.data);
+
+        this.employees = employeeResponse.data;
+        this.groups = equipeResponse.data; // Load group data
+      } catch (error) {
+        console.error('Error fetching employees:', error);
+      }
+    },
     async initializeData() {
       try {
         const events = INITIAL_EVENTS
         // const events = await fetchEventsFromAPI();
-        const employees = await fetchEmployeesFromAPI()
+        await this.fetchEmployees()
+        // console.log(this.employees);
+
         const holidays = await fetchHolidaysFromAPI()
-        console.log(events)
+        // console.log(events)
         // Generate employee resources
-        this.allResources = employees.map((employee) => ({
-          id: employee.employee_id,
-          title: `${employee.first_name} ${employee.last_name}`,
-          department: employee.department,
+        this.allResources = this.employees.map((employee) => ({
+          id: employee.id,
+          title: `${employee.firstname} ${employee.surname}`,
+          department: employee.equipe_id,
           logo: employee.logo || 'https://placeholder.com/30?text=TB',
         }))
 
@@ -110,6 +151,8 @@ export default {
         // console.log(this.allResources);
 
         this.filteredEvents = eventArray
+        // console.log(eventArray);
+
 
         this.calendarOptions.events = this.filteredEvents
         this.calendarOptions.resources = this.filteredResources
@@ -142,14 +185,16 @@ export default {
     filterResources(department) {
       console.log(department)
       console.log('this')
+      
 
       if (!department) {
         this.filteredResources = this.allResources
-        console.log(this.filteredResources)
       } else {
+        console.log(this.allResources)
         this.filteredResources = this.allResources.filter(
-          (resource) => resource.department === department,
+          (resource) => resource.department === Number(department),
         )
+        console.log(this.filteredResources)
       }
       this.calendarOptions.resources = this.filteredResources
     },
@@ -185,30 +230,36 @@ export default {
 }
 </script>
 <template>
-  <div class="filters">
-    <label for="department-filter">Filter by Department:</label>
-    <select id="department-filter" @change="filterResources($event.target.value)">
-      <option value="">All</option>
-      <option value="Groupe A">Groupe A</option>
-      <option value="Groupe B">Groupe B</option>
-      <option value="Groupe C">Groupe C</option>
-    </select>
+  <div class="container h-50">
 
-    <label for="event-filter">Filter by Event Type:</label>
-    <select id="event-filter" @change="filterEvents($event.target.value)">
-      <option value="planning">Planning</option>
-      <option value="swipes">Swipes</option>
-    </select>
+    <div class="filters">
+      <label for="department-filter">Filter by Department:</label>
+      <select id="department-filter" @change="filterResources($event.target.value)">
+        <option value="">Tous</option>
+        <option value="1">Tourrette Levens</option>
+        <option value="2">Nogent</option>
+        <option value="3">Sault-Brénaz</option>
+      </select>
+
+      <label for="event-filter">Filter by Event Type:</label>
+      <select id="event-filter" @change="filterEvents($event.target.value)">
+        <option value="planning">Planning</option>
+        <option value="swipes">Swipes</option>
+      </select>
+    </div>
+    <FullCalendar :options="calendarOptions" />
   </div>
-  <FullCalendar :options="calendarOptions" />
+
 </template>
 <style>
 .fc-resource-label img {
   margin-right: 8px;
 }
+
 .fc-resource-label span {
   font-weight: bold;
 }
+
 .filters {
   display: flex;
   gap: 20px;

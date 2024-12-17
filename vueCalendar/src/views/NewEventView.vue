@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import NewEvent from '../components/NewEvent.vue'
+import EventManager from '../components/EventManager.vue'
 </script>
 
 <template>
   <main>
-    <NewEvent />
+    <EventManager />
   </main>
 </template>

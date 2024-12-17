@@ -50,5 +50,8 @@ console.log(INITIAL_EVENTS);
 }
 </script>
 <template>
-  <FullCalendar :options="calendarOptions" />
+  <div class="container">
+
+    <FullCalendar :options="calendarOptions" />
+  </div>
 </template>

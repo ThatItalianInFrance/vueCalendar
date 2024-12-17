@@ -17,6 +17,14 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
     },
+    // {
+    //   path: '/planningmanager',
+    //   name: 'planningmanager',
+    //   // route level code-splitting
+    //   // this generates a separate chunk (About.[hash].js) for this route
+    //   // which is lazy-loaded when the route is visited.
+    //   component: () => import('../views/PlanningManagerView.vue'),
+    // },
     {
       path: '/groups',
       name: 'groups',
@@ -27,7 +35,7 @@ const router = createRouter({
     },
     {
       path: '/newplanning',
-      name: 'newplanning',
+      name: 'planning manager',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
